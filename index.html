@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocaloid DataBase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="sidebar">
+        <span id="title"><h2>MÉTODOS HTTP</h2></span> <br>
+        <a class="method-btn active" data-method="GET" onclick="switchMethod('GET')">GET</a> <br>
+        <a class="method-btn" data-method="POST" onclick="switchMethod('POST')">POST</a> <br>
+        <a class="method-btn" data-method="PUT" onclick="switchMethod('PUT')">PUT</a> <br> 
+        <a class="method-btn" data-method="DELETE" onclick="switchMethod('DELETE')">DELETE</a> <br>
+    </div>
+    <main id="main">
+    
+      <div id="panel">
+        <!-- Panel -->
+        <div class="panel-header">
+          <span class="panel-method-tag" id="panel-method-tag">GET</span>
+          <span class="panel-endpoint" id="panel-endpoint">/api/vocaloids</span>
+        </div>
+    
+
+          <div id="view-GET">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Release</th>
+                    <th>Affiliation</th>
+                    <th>Versions</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  <tr class="loading-row"><td colspan="4"><span class="loading-text">Carregando...</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="pagination"></div>
+          </div>
+
+
+          <!--POST--> 
+          <div id="view-POST" style="display:none;"> 
+            <div class="form-area">
+              <div class="field-group">
+                <div class="field">
+                  <label>Name <span class="req">*</span></label>
+                  <input type="text" id="post-name" placeholder="ex: Hatsune Miku">
+                </div>
+                <div class="field">
+                  <label>Release <span class="req">*</span></label>
+                  <input type="text" id="post-release" placeholder="ex: 2007">
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="field full">
+                  <label>Affiliation <span class="req">*</span></label>
+                  <input type="text" id="post-affil" placeholder="ex: Crypton Future Media">
+                </div>
+              </div>
+              <div class="field">
+                <label>Versions</label>
+                <div class="versions-grid" id="post-versions">
+                  <label class="ver-check"><input type="checkbox" value="v1"><span>V1</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v2"><span>V2</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v3"><span>V3</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v4"><span>V4</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v5"><span>V5</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v6"><span>V6</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn-reset" onclick="clearForm('POST')">Limpar</button>
+              <button class="btn-submit" onclick="handlePost()">Enviar POST</button>
+            </div>
+          </div>
+          <div id="view-PUT" style="display:none;">
+            <div class="form-area">
+              <div class="field-group">
+                <div class="field full">
+                  <label>Name <span class="req">*</span></label>
+                  <input type="text" id="put-name" placeholder="Nome do vocaloid a editar">
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="field">
+                  <label>Novo Release</label>
+                  <input type="text" id="put-release" placeholder="ex: 2009">
+                </div>
+                <div class="field">
+                  <label>Nova Affiliation</label>
+                  <input type="text" id="put-affil" placeholder="ex: Internet Co.">
+                </div>
+              </div>
+              <div class="field">
+                <label>Versões (marque as que existem)</label>
+                <div class="versions-grid" id="put-versions">
+                  <label class="ver-check"><input type="checkbox" value="v1"><span>V1</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v2"><span>V2</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v3"><span>V3</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v4"><span>V4</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v5"><span>V5</span></label>
+                  <label class="ver-check"><input type="checkbox" value="v6"><span>V6</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn-reset" onclick="clearForm('PUT')">Limpar</button>
+              <button class="btn-submit" onclick="handlePut()">Enviar PUT</button>
+            </div>
+          </div>
+      
+          <!-- DELETE -->
+          <div id="view-DELETE" style="display:none;">
+            <div class="form-area">
+              <div class="delete-warning">
+                <span class="delete-warning-icon">⚠</span>
+                <div class="delete-warning-text">Esta operação removerá permanentemente o vocaloid do banco de dados. A ação não pode ser desfeita.</div>
+              </div>
+              <div class="field">
+                <label>Name <span class="req">*</span></label>
+                <input type="text" id="delete-name" placeholder="Nome exato do vocaloid a deletar">
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn-reset" onclick="clearForm('DELETE')">Limpar</button>
+              <button class="btn-submit" onclick="handleDelete()">Confirmar DELETE</button>
+            </div>
+          </div>
+        </div>
+
+          <div id="response-area" style="display:none;">
+            <div class="response-box">
+              <div class="response-header">
+                <span class="response-label">Response</span>
+                <span id="status-badge" class="status-badge status-ok">200 OK</span>
+              </div>
+              <div class="response-body" id="response-body"></div>
+            </div>
+          </div>
+          
+ </main>      
+    <script src="script.js"></script>
+</body>
+</html>
