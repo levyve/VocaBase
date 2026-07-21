@@ -5,11 +5,13 @@ Feito para a inscrição na empresa CEOS jr da UFC
 ## Primeiros Passos
  1. Clone o repositório:  
    `git clone https://github.com/levyve/VocaBase.git`
- 2. Baixe as dependências:  
+ 2. Modifique o arquivo .env 
+ 
+ 3. Baixe as dependências:  
    `npm install -D @types/node@^25.6.0 prisma@6.19.0 tsx@^4.21.0 typescript@^6.0.3`
- 3. Gere o Prisma Client:  
+ 4. Gere o Prisma Client:  
     `npx prisma generate`
- 4. Inicie o server:  
+ 5. Inicie o server:  
      `node --watch server.js`
  6. Abra o arquivo index
 
